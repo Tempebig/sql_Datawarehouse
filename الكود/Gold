@@ -1,0 +1,37 @@
+CREATE TABLE gold.fact_sales (
+    sales_sk INT IDENTITY(1,1) PRIMARY KEY,
+    order_id INT,
+    date_sk INT,
+    customer_sk INT,
+    product_id INT,
+    quantity INT,
+    total_amount DECIMAL(10,2)
+);
+
+----
+INSERT INTO gold.fact_sales (order_id, date_sk, customer_sk, product_id, quantity, total_amount)
+SELECT 
+    s.order_id,
+    d.date_sk,
+    c.customer_sk,
+    s.product_id,
+    s.quantity,
+    s.total_amount
+FROM bronze.sales s
+JOIN silver.dim_date d ON s.order_date = d.order_date
+JOIN silver.dim_customer c ON s.customer_id = c.customer_id;
+
+select * from gold.fact_sales
+
+SELECT 
+    dd.year,
+    dc.country,
+    SUM(fs.total_amount) AS total_sales,
+    SUM(fs.quantity) AS total_units
+FROM gold.fact_sales fs
+JOIN silver.dim_date dd ON fs.date_sk = dd.date_sk
+JOIN silver.dim_customer dc ON fs.customer_sk = dc.customer_sk
+GROUP BY dd.year, dc.country
+ORDER BY dd.year, dc.country;
+
+select * from Bronze.crm_contacts
