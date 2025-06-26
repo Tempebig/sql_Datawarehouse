@@ -1,0 +1,43 @@
+create or alter procedure bronze.load_bronze as 
+Begin
+print 'sales rows loaded'
+truncate table bronze.Sales;
+BULK INSERT bronze.Sales
+FROM 'C:\Users\Deena\Desktop\DWProject\sales_no_header.csv'
+WITH (
+    FIELDTERMINATOR = ',',
+    ROWTERMINATOR = '0x0a',
+    FIRSTROW = 1 -- 
+	);
+
+	--- insert custmer
+	print 'customer rows loaded'
+truncate table bronze.customers;
+BULK INSERT bronze.customers
+FROM 'C:\Users\Deena\Desktop\DWProject\customers_no_header.csv'
+WITH (
+    FIELDTERMINATOR = ',',
+    ROWTERMINATOR = '0x0a',
+    FIRSTROW = 1 -- 
+	);
+	---  insert 
+print 'contacts rows loaded'
+truncate table bronze.crm_contacts;
+BULK INSERT bronze.crm_contacts
+FROM 'C:\Users\Deena\Desktop\DWProject\crm_contacts_no_header.csv'
+WITH (
+    FIELDTERMINATOR = ',',
+    ROWTERMINATOR = '0x0a',
+    FIRSTROW = 1 -- 
+	);
+
+	end
+
+
+	exec Bronze.load_bronze
+
+	--- tracting
+
+	select * from bronze.crm_contacts;
+	select * from bronze.customers;
+	select * from bronze.sales
