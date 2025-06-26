@@ -1,0 +1,35 @@
+create schema Bronze
+go 
+create schema silver
+go 
+create schema gold;
+go
+
+
+---- DDL انشاء الجدوال 
+
+CREATE TABLE bronze.sales (
+    order_id INT,
+    order_date DATE,
+    customer_id INT,
+    product_id INT,
+    quantity INT,
+    total_amount DECIMAL(10,2)
+);
+
+-- crm_contacts.csv
+CREATE TABLE bronze.crm_contacts (
+    customer_id INT,
+    phone NVARCHAR(50),
+    last_contacted DATE,
+    preferred_channel NVARCHAR(50)
+);
+
+-- customers.csv
+CREATE TABLE bronze.customers (
+    customer_id INT,
+    first_name NVARCHAR(100),
+    last_name NVARCHAR(100),
+    email NVARCHAR(150),
+    country NVARCHAR(100)
+);
