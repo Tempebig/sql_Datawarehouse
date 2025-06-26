@@ -1,0 +1,55 @@
+CREATE TABLE silver.dim_customer (
+    customer_sk INT IDENTITY(1,1) PRIMARY KEY,
+    customer_id INT,
+    full_name NVARCHAR(200),
+    email NVARCHAR(150),
+    country NVARCHAR(100)
+);
+--- insert
+INSERT INTO silver.dim_customer (customer_id, full_name, email, country)
+SELECT 
+    customer_id,
+    TRIM(first_name + ' ' + last_name),
+    email,
+    country
+FROM bronze.customers;
+select * from silver.dim_customer;
+ select * from Bronze.customers;
+
+ ----
+ CREATE TABLE silver.dim_date (
+    date_sk INT IDENTITY(1,1) PRIMARY KEY,
+    order_date DATE,
+    year INT,
+    month INT,
+    day INT,
+    month_name NVARCHAR(20)
+);
+
+---- insert data table data
+INSERT INTO silver.dim_date (order_date, year, month, day, month_name)
+SELECT DISTINCT 
+    order_date,
+    YEAR(order_date),
+    MONTH(order_date),
+    DAY(order_date),
+    DATENAME(MONTH, order_date)
+FROM bronze.sales;
+
+select * from Bronze.sales;
+select * from silver.dim_date;
+----- prou
+CREATE TABLE silver.dim_product (
+    product_id INT PRIMARY KEY
+);
+
+--- insert 
+INSERT INTO silver.dim_product (product_id)
+SELECT DISTINCT product_id FROM bronze.sales;
+
+select * from Bronze.sales
+select * from silver.dim_product
+
+--
+
+
